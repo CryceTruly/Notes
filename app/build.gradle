@@ -55,5 +55,6 @@ dependencies {
 
     // Guava support for Room
     implementation "android.arch.persistence.room:guava:1.1.1"
+    implementation 'com.android.support:cardview-v7:28.0.0'
 
 }

@@ -58,4 +58,15 @@ public class Item {
     public void setId(int id) {
         this.id = id;
     }
+
+    @Override
+    public String toString() {
+        return "Item{" +
+                "title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                ", completed=" + completed +
+                ", priority=" + priority +
+                ", id=" + id +
+                '}';
+    }
 }
