@@ -3,7 +3,7 @@ package com.happy.archtectualcomponents;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
 
-@Entity(tableName = "item")
+@Entity(tableName = "items")
 public class Item {
     private String title,description;
     private Boolean completed;
@@ -57,5 +57,16 @@ public class Item {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    @Override
+    public String toString() {
+        return "Item{" +
+                "title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                ", completed=" + completed +
+                ", priority=" + priority +
+                ", id=" + id +
+                '}';
     }
 }
