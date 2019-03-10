@@ -10,17 +10,15 @@ import android.view.MenuItem;
 import android.widget.NumberPicker;
 import android.widget.Toast;
 
-import static android.content.Intent.EXTRA_TITLE;
-
 public class NewItemActivity extends AppCompatActivity {
     private static final String TAG = "NewItemActivity";
     private TextInputEditText title,desc;
     NumberPicker priority;
     public static final String EXTRA_TITLE=
             "com.happy.archtectualcomponents.EXTRA_TITLE";
-    public static final String DESCRIPTION=
+    public static final String EXTRA_DESCRIPTION=
             "com.happy.archtectualcomponents.DESCRIPTION";
-    public static final String PRIORITY=
+    public static final String EXTRA_PRIORITY=
             "com.happy.archtectualcomponents.EXTRA_PRIORITY";
 
     @Override
@@ -65,16 +63,21 @@ public class NewItemActivity extends AppCompatActivity {
       String  tit=title.getText().toString().trim();
 
         String d=desc.getText().toString().trim();
-        int p=priority.getValue()
+        int p=priority.getValue();
+
+        if(tit.isEmpty() || d.isEmpty()){
+            Toast.makeText(this, "Fill all fields", Toast.LENGTH_SHORT).show();
+            return;
+        }
                 ;
         validateData(tit,d,p);
  Intent intent=new Intent();
  intent.putExtra(EXTRA_TITLE,tit);
 
-intent.putExtra(DESCRIPTION,d);
-intent.putExtra(PRIORITY,p);
+intent.putExtra(EXTRA_DESCRIPTION,d);
+intent.putExtra(EXTRA_PRIORITY,p);
 
-setResult(RESULT_OK);
+setResult(RESULT_OK,intent);
 finish();
 
 

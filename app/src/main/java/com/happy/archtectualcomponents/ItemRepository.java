@@ -69,7 +69,7 @@ new DeleteItemsyncTask(itemDao).execute(item);
 
         @Override
         protected Void doInBackground(Item... items) {
-            itemDao.insert(items[0]);
+            itemDao.delete(items[0]);
             return null;
         }
     }

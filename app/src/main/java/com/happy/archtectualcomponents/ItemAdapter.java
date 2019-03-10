@@ -18,7 +18,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemHolder> {
 private List<Item> liveData=new ArrayList<>();
 private Context mContext;
     private static final String TAG = "ItemAdapter";
-    public ItemAdapter() {
+    public ItemAdapter(Context mContext) {
         this.liveData = liveData;
         this.mContext = mContext;
     }
@@ -32,7 +32,7 @@ private Context mContext;
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ItemHolder holder, final int position) {
+    public void onBindViewHolder(@NonNull final ItemHolder holder, final int position) {
         Log.d(TAG, "onBindViewHolder: called");
 
         holder.setDataToViews(liveData.get(position).getTitle(),liveData.get(position).getDescription(),
@@ -43,6 +43,12 @@ private Context mContext;
                 Toast.makeText(mContext, liveData.get(position).getId(), Toast.LENGTH_SHORT).show();
             }
         });
+
+
+
+    }
+    public Item getItemAt(int p ){
+        return liveData.get(p);
 
     }
 
