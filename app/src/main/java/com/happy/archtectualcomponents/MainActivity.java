@@ -24,6 +24,7 @@ private ItemViewModel itemViewModel;
     private static final String TAG = "MainActivity";
     private RecyclerView recyclerView;
 public static final int ADD_REQUEST_CODE=1;
+public static final int EDIT_REQUEST_CODE=2;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,13 +32,13 @@ public static final int ADD_REQUEST_CODE=1;
         recyclerView=findViewById(R.id.list);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getBaseContext()));
-        final ItemAdapter adapter=new ItemAdapter(getBaseContext());
+        final ItemAdapter adapter=new ItemAdapter();
         recyclerView.setAdapter(adapter);
         itemViewModel= ViewModelProviders.of(this).get(ItemViewModel.class);
         itemViewModel.getAllItems().observe(this, new Observer<List<Item>>() {
             @Override
             public void onChanged(@Nullable List<Item> items) {
-               adapter.setData(items);
+               adapter.submitList(items);
             }
         });
 new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0,ItemTouchHelper.LEFT|ItemTouchHelper.RIGHT) {
@@ -53,7 +54,22 @@ new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0,ItemTouchHelper.LEFT|It
 
     }
 }).attachToRecyclerView(recyclerView);
+
+adapter.setOnItemClickListener(new ItemAdapter.itemOnClickListener() {
+    @Override
+    public void onItemClick(Item item) {
+        Intent i =new Intent(MainActivity.this,NewItemActivity.class);
+  i.putExtra(NewItemActivity.EXTRA_TITLE,item.getTitle());
+  i.putExtra(NewItemActivity.EXTRA_DESCRIPTION,item.getDescription());
+  i.putExtra(NewItemActivity.EXTRA_PRIORITY,item.getPriority());
+  i.putExtra(NewItemActivity.EXTRA_ID,item.getId());
+  startActivityForResult(i,EDIT_REQUEST_CODE);
+
     }
+});
+    }
+
+
 
 
     public void goNext(View view) {
@@ -77,8 +93,27 @@ new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0,ItemTouchHelper.LEFT|It
 
 
 
-            }else{
-                Toast.makeText(this, "Not saved", Toast.LENGTH_SHORT).show();
+            }else   if(requestCode==EDIT_REQUEST_CODE && resultCode==RESULT_OK){
+
+           int id=data.getIntExtra(NewItemActivity.EXTRA_ID,-1);
+
+           if(id==-1){
+               Snackbar.make(recyclerView,"Item cant be updated",Snackbar.LENGTH_LONG).show();
+
+           }
+            String title=data.getStringExtra(NewItemActivity.EXTRA_TITLE);
+            String description=data.getStringExtra(NewItemActivity.EXTRA_DESCRIPTION);
+
+            int priority=data.getIntExtra(NewItemActivity.EXTRA_PRIORITY,0);
+
+            Item item=new Item(title,description,false,priority);
+item.setId(id);
+            itemViewModel.update(item);
+            Snackbar.make(recyclerView,"Item updated",Snackbar.LENGTH_LONG).show();
+
+
+        }else {
+            Toast.makeText(this, "Not saved", Toast.LENGTH_SHORT).show();
 
         }
         super.onActivityResult(requestCode, resultCode, data);
