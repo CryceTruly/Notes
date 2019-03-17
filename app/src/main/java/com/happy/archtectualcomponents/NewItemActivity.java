@@ -21,14 +21,32 @@ public class NewItemActivity extends AppCompatActivity {
     public static final String EXTRA_PRIORITY=
             "com.happy.archtectualcomponents.EXTRA_PRIORITY";
 
+
+    public static final String EXTRA_ID=
+            "com.happy.archtectualcomponents.EXTRA_ID";
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_item);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle("Create New");
 
         initViews();
+
+        Intent intent=getIntent();
+        if (intent.hasExtra(EXTRA_ID)) {
+
+            getSupportActionBar().setTitle("Edit Item");
+            title.setText(intent.getStringExtra(EXTRA_TITLE));
+            desc.setText(intent.getStringExtra(EXTRA_DESCRIPTION));
+priority.setValue(intent.getIntExtra(EXTRA_PRIORITY,0));
+
+        }else{
+
+            getSupportActionBar().setTitle("Create New");
+
+        }
 
     }
 
@@ -77,6 +95,11 @@ public class NewItemActivity extends AppCompatActivity {
 intent.putExtra(EXTRA_DESCRIPTION,d);
 intent.putExtra(EXTRA_PRIORITY,p);
 
+int id=getIntent().getIntExtra(EXTRA_ID,-1);
+if(id!=-1)
+{
+    intent.putExtra(EXTRA_ID,id);
+}
 setResult(RESULT_OK,intent);
 finish();
 
